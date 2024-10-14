@@ -8,8 +8,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
 // 테스트 진행 시 JUnit 에 내장된 실행자 외 다른 실행자 실행
@@ -33,6 +33,24 @@ public class HelloControllerTest {
         mvc.perform(get("/hello"))   //get 요청
                 .andExpect(status().isOk())    //header status 확인 -> 200,404,500 등
                 .andExpect(content().string(hello)); //응답 본문과 맞는지 검증
+    }
+
+    @Test
+    public void return_helloDto() throws Exception {
+        String name = "hello";
+        int amount = 1000;
+
+        mvc.perform(
+                        get("/hello/dto")
+                                .param("name", name)
+                                .param("amount", String.valueOf(amount)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(name)))
+                .andExpect(jsonPath("$.amount", is(amount)));
+        // jsonPath
+        // Json 응답값을 필드별로 검증하는 메소드
+        // $를 기준으로 필드명을 명시
+        // 여기서는 name,amount 를 검증하니 $ ~ 이런식으로!
     }
 }
 
