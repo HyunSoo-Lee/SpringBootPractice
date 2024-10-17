@@ -1,11 +1,12 @@
 package com.HS.springboot.web;
 
+import com.HS.springboot.domain.posts.Posts;
 import com.HS.springboot.service.posts.PostsService;
+import com.HS.springboot.web.dto.PostsResponseDto;
 import com.HS.springboot.web.dto.PostsSaveRequestDto;
+import com.HS.springboot.web.dto.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,5 +18,16 @@ public class PostsApiController {
     //이제 이 프로젝트는 /hello 로 요청이 오면 아래 함수를 보내주는 역할!
     public Long save(@RequestBody PostsSaveRequestDto requestDto){
         return postsService.save(requestDto);
+    }
+
+    @PutMapping("/api/v1/posts/{id}")
+    public Long update(@PathVariable Long id, @RequestBody PostsUpdateRequestDto requestDto){
+        return postsService.update(id,requestDto);
+    }
+
+    // 수정, 조회 기능
+    @GetMapping("/api/v1/posts/{id}")
+    public PostsResponseDto findById(@PathVariable Long id){
+        return postsService.findById(id);
     }
 }

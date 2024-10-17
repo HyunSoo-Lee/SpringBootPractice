@@ -42,6 +42,11 @@ public class Posts {
         this.author = author;
     }
 
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
     //만약 NoArgsConstructor가 없다면?
     //public posts() {}
     //만약 이 클래스에서 기본 생성자가 없다면,
