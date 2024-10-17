@@ -1,5 +1,3 @@
-![image](https://github.com/user-attachments/assets/df705cf1-acd3-45d6-9408-18bdd1bbbad7)![image](https://github.com/user-attachments/assets/5574b88c-c86a-4bdc-afa4-fb8a01527b43)# 스프링 부트 웹 서비스 프로젝트
-
 ## 개요
 
 **스프링부트**를 사용한 간단한 웹 애플리케이션을 개발하고 
