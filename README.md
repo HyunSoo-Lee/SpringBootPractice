@@ -60,7 +60,7 @@
 3. **Repository Layer**
    **DB에 접근하는 영역**.<br/>
    **Dao 영역**이라고 생각해도 괜찮음.<br/><br/>
-4. **Dtos**
+4. **Dtos**<br/>
    **DTO들의 영역**.<br/>
    Ex) 뷰 템플릿 엔진에서 사용될 객체나 Repository Layer에서 결과로 넘겨준 객체 등<br/><br/>
 5. **Domain Model**<br/>
