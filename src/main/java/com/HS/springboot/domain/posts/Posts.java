@@ -28,6 +28,9 @@ public class Posts {
 
     private String author;
 
+    // Entity 클래스에서는 Setter 사용 금지.
+    //대신, Setter가 없어도 값을 채워서 DB에 Insert 하는 기능을 만들기 위해
+    //생성자를 만들어주어야 하는데.... 생성자 만드는 대신 @Builder 클래스를 사용하는 것이다.
     @Builder
     //빌더 패턴은 객체의 생성 과정을 분리하여, 복잡한 객체를 단계적으로 만들어내는 방법입니다.
     //생성자나 setter 메서드 대신에,
