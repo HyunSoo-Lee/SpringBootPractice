@@ -75,6 +75,13 @@
    즉, **Entity를 DB와 연결해둔 상태로 관리하는 메모리 공간**<br/>
 <br/>
 
+## Kubernates의 기본 구조
+<br/>
+
+![image](https://github.com/user-attachments/assets/1c991f63-16c5-4b9a-8008-da253df91d1f)
+
+<br/>
+
 ## K8s, Docker 중요 개념에 대한 메모
 1. **Pod**<br/>
    가장 작은 실행 단위, 실제 애플리케이션의 컨테이너를 포함하고 있다.<br/>
