@@ -1,5 +1,6 @@
 package com.HS.springboot.domain.posts;
 
+import com.HS.springboot.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import javax.persistence.*;
 //자바에서 생성자의 이름은 클래스의 이름과 동일하며, 생성자는 리턴 타입이 없습니다.
 
 @Entity //테이블과 매칭될 클래스임을 선언하는 어노테이션
-public class Posts {
+public class Posts extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto-increment 설정용
     private Long id;
