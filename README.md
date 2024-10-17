@@ -2,7 +2,7 @@
 
 **스프링부트**를 사용한 간단한 웹 애플리케이션을 개발하고 
 **도커**, **쿠버네티스**, 그리고 **AWS**를 통해 배포하는 연습을 위한 레포지토리
-
+<br/>
 ## 기술 스택
 - **JDK 1.8.0**: 프로그래밍 언어
 - **Spring Boot 2.1.9**: 웹 애플리케이션을 위한 프레임워크
@@ -11,6 +11,34 @@
 - **Docker**: 컨테이너 플랫폼
 - **Kubernetes**: 컨테이너 오케스트레이션
 - **AWS (Amazon Web Services)**: 클라우드 호스팅 플랫폼
+<br/><br/>
+## Spring의 웹 계층
+
+<br/>
+
+![image](https://github.com/user-attachments/assets/b57d26b2-f7da-4499-8b01-cfcce2f63efd)
+
+<br/>
+
+1. **Web Layer**<br/>
+   컨트롤러(@Controller)와 JSP/Freemarker 등의 **뷰 템플릿 영역**.<br/>
+   이외에도 필터(@Filter), 인터셉터, 컨트롤러 어드바이스(@ControllerAdvice) 등 **외부 요청과 응답**에 대한 전반적인 영역.<br/><br/>
+2. **Service Layer**<br/>
+   @Service에 사용되는 **서비스 영역**.<br/>
+   일반적으로 **Controller와 Dao의 중간**에서 사용.(@Transactional이 필요함.)<br/><br/>
+3. **Repository Layer**
+   **DB에 접근하는 영역**.<br/>
+   **Dao 영역**이라고 생각해도 괜찮음.<br/><br/>
+4. **Dtos**<br/>
+   **DTO들의 영역**.<br/>
+   Ex) 뷰 템플릿 엔진에서 사용될 객체나 Repository Layer에서 결과로 넘겨준 객체 등<br/><br/>
+5. **Domain Model**<br/>
+   **도메인이라 불리는 개발 대상**을 모든 사람이 동일한 관점에서 이해할 수 있고 공유할 수 있도록 단순화시킨 것.<br/>
+   **비즈니스 로직을 처리하는 영역**.<br/>
+   Ex) 택시 앱이라고 하면 배차, 탑승, 요금 등이 모두 도메인이 될 수 있음.<br/>
+   @Entity가 사용된 영역 역시 도메인 모델이라고 이해할 수 있음.<br/>
+   다만, 무조건 데이터베이스의 테이블과 관계가 있어야 하는 것은 아니다. VO처럼 값 객체들도 이 영역에 해당하기 때문이다.<br/><br/>
+
 
 ## Spring 중요 개념에 대한 메모
 1. **ORM**(Object-Relational Mapping) 이란??<br/>
@@ -45,30 +73,7 @@
    **영속성 컨텍스트** 내에서만 가능하다!<br/><br/>
    ->**영속성 컨텍스트**란? JPA에서 엔티티 객체를 관리하는 일종의 캐시, 혹은 저장소를 말한다.<br/>
    즉, **Entity를 DB와 연결해둔 상태로 관리하는 메모리 공간**<br/>
-<br/><br/>
-**Spring의 웹 계층**
 <br/>
-
-![image](https://github.com/user-attachments/assets/b57d26b2-f7da-4499-8b01-cfcce2f63efd)
-
-1. **Web Layer**<br/>
-   컨트롤러(@Controller)와 JSP/Freemarker 등의 **뷰 템플릿 영역**.<br/>
-   이외에도 필터(@Filter), 인터셉터, 컨트롤러 어드바이스(@ControllerAdvice) 등 **외부 요청과 응답**에 대한 전반적인 영역.<br/><br/>
-2. **Service Layer**<br/>
-   @Service에 사용되는 **서비스 영역**.<br/>
-   일반적으로 **Controller와 Dao의 중간**에서 사용.(@Transactional이 필요함.)<br/><br/>
-3. **Repository Layer**
-   **DB에 접근하는 영역**.<br/>
-   **Dao 영역**이라고 생각해도 괜찮음.<br/><br/>
-4. **Dtos**<br/>
-   **DTO들의 영역**.<br/>
-   Ex) 뷰 템플릿 엔진에서 사용될 객체나 Repository Layer에서 결과로 넘겨준 객체 등<br/><br/>
-5. **Domain Model**<br/>
-   **도메인이라 불리는 개발 대상**을 모든 사람이 동일한 관점에서 이해할 수 있고 공유할 수 있도록 단순화시킨 것.<br/>
-   **비즈니스 로직을 처리하는 영역**.<br/>
-   Ex) 택시 앱이라고 하면 배차, 탑승, 요금 등이 모두 도메인이 될 수 있음.<br/>
-   @Entity가 사용된 영역 역시 도메인 모델이라고 이해할 수 있음.<br/>
-   다만, 무조건 데이터베이스의 테이블과 관계가 있어야 하는 것은 아니다. VO처럼 값 객체들도 이 영역에 해당하기 때문이다.<br/><br/>
 
 ## K8s, Docker 중요 개념에 대한 메모
 1. **Pod**<br/>
