@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
+
+// *** OAuth 흐름의 첫번째 클래스 ***
+
+// Spring Security가 사용자 정보를 가져오면, 그것을 가공하고 세션에 저장
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
@@ -32,9 +36,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails()
                 .getUserInfoEndpoint().getUserNameAttributeName();
 
+        //OAuthAttributions.of 메서드는 구글이나 네이버와 같은 OAuth 제공자에 맞게 사용자 정보를 가공
         OAuthAttributes attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.getAttributes());
 
+        // User객체로 변환한 후 존재하는 사용자의 경우 업데이트, 아니면 새로 저장
         User user = saveOrUpdate(attributes);
+        // 최종적으로 SessionUser 객체를 생성하여 세션에 저장한다
         httpSession.setAttribute("user", new SessionUser(user));
 
         return new DefaultOAuth2User(
