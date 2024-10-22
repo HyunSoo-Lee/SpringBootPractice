@@ -87,7 +87,7 @@
   Spring MVC는 **모델, 뷰, 컨트롤러**로, 계층형 구조는 **Service Layer**와 **Repository Layer**로 나뉨.
 
 - **요청 처리 흐름**  
-  사용자 요청은 **Web Layer (Controller)**에서 시작하여, **Service Layer**로 비즈니스 로직을 처리하고, **Repository Layer**에서 데이터를 주고받음. MVC의 **Controller → Model → View** 흐름과 유사
+  사용자 요청은 **Web Layer (Controller)** 에서 시작하여, **Service Layer**로 비즈니스 로직을 처리하고, **Repository Layer**에서 데이터를 주고받음. MVC의 **Controller → Model → View** 흐름과 유사
 
 - **컨트롤러의 역할**  
   **Controller**가 사용자 요청을 처리하고, 비즈니스 로직으로 전달하는 **중재자 역할**을 수행.
