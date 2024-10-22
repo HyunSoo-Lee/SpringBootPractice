@@ -18,6 +18,14 @@
 
 ## 기술 스택
 
+<div align=left>
+   <img src="https://img.shields.io/badge/openjdk-000000?style=for-the-badge&logo=openjdk&logoColor=white">
+   <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+   <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+   <img src="https://img.shields.io/badge/kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white">
+   <img src="https://img.shields.io/badge/aws%20ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
+   <br>
+
 - **JDK 1.8.0**: 프로그래밍 언어
 - **Spring Boot 2.1.9**: 웹 애플리케이션을 위한 프레임워크
 - **롬복(Lombok)**: 자바에서 보일러플레이트 코드를 줄여주는 라이브러리
