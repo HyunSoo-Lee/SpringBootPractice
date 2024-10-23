@@ -3,6 +3,8 @@ package com.HS.springboot.config.auth.dto;
 import com.HS.springboot.domain.user.User;
 import lombok.Getter;
 
+import java.io.Serializable;
+
 
 // *** OAuth 흐름의 세번째 클래스 ***
 
@@ -11,7 +13,7 @@ import lombok.Getter;
 // SessionUser 인증된 사용자 정보만 필요로 함. 그 외에 필요한 정보는 없기때문에 name, email, picture 만 필드로 선언
 
 @Getter
-public class SessionUser {
+public class SessionUser implements Serializable {
     private String name;
     private String email;
     private String picture;
