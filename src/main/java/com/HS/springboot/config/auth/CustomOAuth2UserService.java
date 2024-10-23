@@ -23,7 +23,7 @@ import java.util.Collections;
 // Spring Security가 사용자 정보를 가져오면, 그것을 가공하고 세션에 저장
 @RequiredArgsConstructor
 @Service
-public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User>{
+public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
 
@@ -50,6 +50,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 attributes.getNameAttributeKey());
     }
 
+
     private User saveOrUpdate(OAuthAttributes attributes) {
         User user = userRepository.findByEmail(attributes.getEmail())
                 .map(entity -> entity.update(attributes.getName(), attributes.getPicture()))
@@ -57,5 +58,4 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         return userRepository.save(user);
     }
-
 }
