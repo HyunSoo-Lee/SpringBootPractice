@@ -1,9 +1,33 @@
+---
+
+# 목차
+
+1. [개요](#개요)  
+2. [기술 스택](#기술-스택)  
+3. [Spring의 웹 계층](#spring의-웹-계층)  
+4. [OAuth 로그인 기능 순서](#oauth-로그인-기능-순서)  
+5. [MVC와 스프링 계층형 구조의 차이점](#mvc와-스프링-계층형-구조의-차이점)   
+6. [Spring 중요 개념](#spring-중요-개념)  
+7. [Kubernetes 기본 구조](#kubernetes-기본-구조)  
+
+---
+
 ## 개요
 
-**스프링부트**를 사용한 간단한 웹 애플리케이션을 개발하고 
-**도커**, **쿠버네티스**, 그리고 **AWS**를 통해 배포하는 연습을 위한 레포지토리
-<br/>
+**스프링부트**를 사용한 간단한 웹 애플리케이션을 개발하고 **도커**, **쿠버네티스**, 그리고 **AWS**를 통해 배포하는 연습을 위한 레포지토리
+
+---
+
 ## 기술 스택
+
+<div align=left>
+   <img src="https://img.shields.io/badge/openjdk-000000?style=for-the-badge&logo=openjdk&logoColor=white">
+   <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+   <img src="https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white">
+   <img src="https://img.shields.io/badge/kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white">
+   <img src="https://img.shields.io/badge/aws%20ec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
+   <br>
+
 - **JDK 1.8.0**: 프로그래밍 언어
 - **Spring Boot 2.1.9**: 웹 애플리케이션을 위한 프레임워크
 - **롬복(Lombok)**: 자바에서 보일러플레이트 코드를 줄여주는 라이브러리
@@ -11,122 +35,145 @@
 - **Docker**: 컨테이너 플랫폼
 - **Kubernetes**: 컨테이너 오케스트레이션
 - **AWS (Amazon Web Services)**: 클라우드 호스팅 플랫폼
-<br/><br/>
+
+---
+
 ## Spring의 웹 계층
 
+![Web Layer Diagram 1](https://github.com/user-attachments/assets/b57d26b2-f7da-4499-8b01-cfcce2f63efd)
+![Web Layer Diagram 2](https://github.com/user-attachments/assets/fb1598e0-a064-48c9-818a-106872a01833)
 
-![image](https://github.com/user-attachments/assets/b57d26b2-f7da-4499-8b01-cfcce2f63efd)
+1. **Web Layer**  
+   컨트롤러(@Controller)와 JSP/Freemarker 등의 **뷰 템플릿 영역**. 이외에도 **필터(@Filter), 인터셉터, 컨트롤러 어드바이스(@ControllerAdvice)** 등을 통해 **외부 요청과 응답**을 처리.
 
-<br/>
+2. **Service Layer**  
+   @Service에 사용되는 **서비스 영역**. 주로 **Controller와 Dao**의 중간에서 사용되며, **@Transactional**이 필요함.
 
-1. **Web Layer**<br/>
-   컨트롤러(@Controller)와 JSP/Freemarker 등의 **뷰 템플릿 영역**.<br/>
-   이외에도 필터(@Filter), 인터셉터, 컨트롤러 어드바이스(@ControllerAdvice) 등 **외부 요청과 응답**에 대한 전반적인 영역.<br/><br/>
-2. **Service Layer**<br/>
-   @Service에 사용되는 **서비스 영역**.<br/>
-   일반적으로 **Controller와 Dao의 중간**에서 사용.(@Transactional이 필요함.)<br/><br/>
-3. **Repository Layer**
-   **DB에 접근하는 영역**.<br/>
-   **Dao 영역**이라고 생각해도 괜찮음.<br/><br/>
-4. **Dtos**<br/>
-   **DTO들의 영역**.<br/>
-   Ex) 뷰 템플릿 엔진에서 사용될 객체나 Repository Layer에서 결과로 넘겨준 객체 등<br/><br/>
-5. **Domain Model**<br/>
-   **도메인이라 불리는 개발 대상**을 모든 사람이 동일한 관점에서 이해할 수 있고 공유할 수 있도록 단순화시킨 것.<br/>
-   **비즈니스 로직을 처리하는 영역**.<br/>
-   Ex) 택시 앱이라고 하면 배차, 탑승, 요금 등이 모두 도메인이 될 수 있음.<br/>
-   @Entity가 사용된 영역 역시 도메인 모델이라고 이해할 수 있음.<br/>
-   다만, 무조건 데이터베이스의 테이블과 관계가 있어야 하는 것은 아니다. VO처럼 값 객체들도 이 영역에 해당하기 때문이다.<br/><br/>
+3. **Repository Layer**  
+   **DB에 접근하는 영역**, 흔히 **Dao 영역**이라고 부름.
 
-## 헷갈려서 적어둔다! 책에서의 OAuth 로그인 기능 순서
-1.**OAuth2 사용자 정보 수신**<br/>
-   CustomOAuth2UserService가 Google 또는 Naver와 같은 OAuth2 제공자로부터 사용자 정보를 수신<br/><br/>
-2. **OAuthAttributes로 사용자 정보 가공** <br/>
-   OAuthAttributes 클래스를 통해 제공자별로 들어온 사용자 정보를 일관된 형식으로 가공<br/>
-   이때, CustomOAuth2UserService를 통해 사용자 정보를 **DB에 저장할 수 있도록** User엔티티로 변환하고, 동시에 **세션 관리**를 위해 SessionUser 객체로도 변환함<br/><br/>
-3. **User 엔티티로 변환하여 DB에 저장**<br/>
-   가공된 정보를 바탕으로 User 엔티티 객체를 생성하거나, 이미 존재하는 사용자의 정보를 업데이트.<br/><br/>
-4. **SessionUser로 변환하여 세션에 저장** <br/>
-   **세션 관리**를 위해, User 객체의 필요한 정보만 추출한 SessionUser 객체를 생성 <br/>
-   이 객체는 세션에 **직렬화 가능한 형태**로 저장되며, 애플리케이션에서 로그인된 사용자 정보를 사용할 때 사용<br/><br/>
-5. **왜 번거롭게 두가지로 나누어 처리하는가?** <br/>
-   **User 엔티티는 DB와의 연관 관계를 가지며, 복잡한 비즈니스 로직을 포함함.** 이를 세션에 직접 저장하는 경우 **직렬화 과정**에서 성능 문제와 같은 상황이 발생할 수 있다. <br/>
-   따라서 **SessionUser**라는 직렬화가 가능한 간단한 객체를 만들어 **필요한 정보만을 세션에 저장**한다.<br/>
-   이러한 방식을 통해 **DB관리**와 **세션 관리**를 분리하고, 각각의 역할에 맞게 최적화된 방식으로 정보를 저장 및 처리하도록 구성함<br/><br/>
+4. **DTOs (Data Transfer Objects)**  
+   **DTO들의 영역**. 예: 뷰 템플릿 엔진에서 사용되거나 Repository Layer에서 결과로 반환된 객체.
 
-## Spring 중요 개념에 대한 메모
-1. **ORM**(Object-Relational Mapping) 이란??<br/>
-   객체와 DB 테이블 사이의 관계를 자동으로 매핑해주는 기술!<br/>
-   Hibernate, JPA 등이 여기에 속한다.<br/>
-   SQL과 객체 지향 프로그래밍이 바라보는 다른 패러다임을 **일원화**시켜주는 기술이다.<br/>
-   
-2. **Gradle**과 의존성 관리<br/>
-   compile : gradle 3.4 이전의 방식 - 모든 의존성이 **컴파일과 런타임에 노출**<br/>
-   Implementation : 그 이후 권장되는 방식 **모듈 내부에만 의존성 사용 -> 빌드 속도와 유지보수성의 향상**<br/>
+5. **Domain Model**  
+   **도메인**은 개발 대상의 비즈니스 로직을 처리하는 영역으로, @Entity가 사용된 영역과 관련됨.
 
-3. **DTO**(Data Transfer Object)<br/>
-   계층간 데이터 전달용 객체<br/>
-   **Entity**와 분리되어, 필요한 정보만 포함, **보안과 유연성**을 높인다.<br/>
+---
 
-4. **DAO**(Data Access Object)<br/>
-   **DB와 상호작용**하는 객체, CRUD작업<br/>
-   JpaRepository 인터페이스를 통해 기본적인 작업 제공!<br/>
-   save(), findById(), deleteById() 등의 기본 메소드, 커스텀 쿼리 메소드 findBy~ 등도 있다!<br/>
-   책에서는 **domain**이라는 표현과 패키지로 관리<br/><br/>
-   -> 사실은 다르다?!
-   Domain 패키지와 DAO 패키지는 무엇이 다른가?<br/>
-   DAO는 SQL 쿼리, 실행, 매핑을, 도메인 패키지는 비즈니스 로직과 객체의 상태를 관리한다.<br/>
+## OAuth 로그인 기능 순서
 
-5. DTO와 DAO의 **관계**는?<br/>
-   DAO는 DB에서 직접 데이터를 가져오고, 저장하고, 수정하는 역할 **"즉, DB와의 상호작용"**<br/>
-   DTO는 그 데이터를 가공해서 **서비스**, **컨트롤러** 계층에서 사용할 수 있도록 전달하는 역할 **"계층간 데이터를 전송"**<br/>
+1. **OAuth2 사용자 정보 수신**  
+   `CustomOAuth2UserService`가 Google 또는 Naver와 같은 OAuth2 제공자로부터 사용자 정보를 수신.
 
-6. **더티 체킹**이란?<br/>
-   JPA에서 Entity의 변경 사항을 자동으로 감시, 이를 DB에 자동 반영하는 메커니즘을 뜻한다.<br/>
-   즉, Transaction 내에서 **엔티티 필드값을 수정**하면, 이를 자동으로 감지하여 **Transaction이 끝날때 수정한 값들을 DB에 업데이트**해준다.<br/>
-   **영속성 컨텍스트** 내에서만 가능하다!<br/><br/>
-   ->**영속성 컨텍스트**란? JPA에서 엔티티 객체를 관리하는 일종의 캐시, 혹은 저장소를 말한다.<br/>
-   즉, **Entity를 DB와 연결해둔 상태로 관리하는 메모리 공간**<br/>
-7. **JPA Auditing**<br/>
-   **Entity의 생성 및 수정 시점, 생성자 및 수정자 정보**를 자동으로 기록하는 기능<br/>
-8. **Optional**<br/>
-   **null 값을 안전하게 처리**하는 도구<br/>
-   값이 있을수도, 없을 수도 있는 상황에서 사용됨<br/>
-   DB의 조회나, 값이 있는지 없는지 모르는 메서드(즉, 메서드가 null을 반환할 가능성이 있는 경우)의 리턴 타입으로 사용되며,<br/>
-   null로 인한 오류를 방지하는데 사용된다.<br/>
-   orElse, orElseThrow 등의 함수가 있다.<br/>
-<br/>
+2. **OAuthAttributes로 사용자 정보 가공**  
+   사용자 정보를 **일관된 형식으로 가공**하고, 이를 **User 엔티티** 및 **SessionUser 객체**로 변환하여 DB와 세션 관리에 사용.
 
-## Kubernates의 기본 구조
-<br/>
+3. **User 엔티티로 DB 저장**  
+   변환된 정보를 바탕으로 **User 엔티티 객체**를 생성하거나 업데이트.
 
-![image](https://github.com/user-attachments/assets/1c991f63-16c5-4b9a-8008-da253df91d1f)
+4. **SessionUser로 세션에 저장**  
+   **세션 관리**를 위해 직렬화 가능한 **SessionUser 객체**를 생성하여 세션에 저장.
 
-<br/>
+5. **왜 두 가지로 나누어 처리하는가?**  
+   **User 엔티티**는 복잡한 비즈니스 로직을 포함하므로 **직렬화에 따른 성능 문제**가 있을 수 있음. 이를 피하기 위해 **SessionUser** 객체를 사용.
 
-## K8s, Docker 중요 개념에 대한 메모
-1. **Pod**<br/>
-   가장 작은 실행 단위, 실제 애플리케이션의 컨테이너를 포함하고 있다.<br/>
+---
 
-2. **Node**<br/>
-   Pod를 실행하는 가상(혹은 물리)머신 - 마스터/워커 노드!<br/>
+## MVC와 스프링 계층형 구조의 차이점
 
-3. **Deployment**<br/>
-   Pod의 배포와 관리를 정의하며, 여러 Pod를 Replication하거나, Update한다.<br/>
+### 1. MVC란?
 
-4. **etcd**<br/>
-   클러스터 내 모든 정보를 저장해두는 일종의 메모장<br/>
+**Spring MVC**는 Model-View-Controller (MVC) 디자인 패턴을 기반으로 하는 웹 애플리케이션 구조.  
+웹 애플리케이션을 **모델(Model)**, **뷰(View)**, **컨트롤러(Controller)** 로 나눔
 
-5. **API 서버**<br/>
-   k8s의 중앙 통신 허브.<br/>
-   클러스터와 상호작용 할 수 있는 진입점이고, **사용자의 요청 작업을 받아들이고, 처리**한다.<br/>
-   작업에 필요한 **구성요소에 전달**하는 역할도 함<br/>
+- **Model**: 애플리케이션의 **핵심 데이터**와 **비즈니스 로직**을 처리하며, 데이터베이스와 상호작용.
+- **View**: 사용자에게 **화면을 출력**하는 역할. HTML, JSP, Thymeleaf 같은 템플릿 엔진을 사용.
+- **Controller**: **사용자 요청을 처리**, 모델과 뷰 사이의 **중재자 역할**. 요청을 모델로 보내고, 처리된 데이터를 뷰로 전달.
 
-6. **Controller Manager**<br/>
-   k8s 클러스터 관리에 필요한 컨트롤러들을 관리하는 역할!<br/>
-   상태를 모니터링하고, **원하는 상태와 현재 상태**의 일치를 위해 동작한다.<br/>
-   파드 개수의 유지, 유지보수를 위한 파드 위치 변경 등이 주요 예시<br/>
+### 2. 공통점
 
-7. **Kublet**<br/>
-   각 노드에서 실행되는 에이전트, 노드에서 실제로 파드를 실행하고 관리하는 역할<br/>
-   **API에서 명령을 받아 노드 내에서 파드를 생성 및 모니터링하며, 이를 API에 다시 보고한다.**<br/>
+- **역할의 분리**  
+  둘 다 **책임 분리**에 중점을 두며, **Separation of Concerns** 원칙 사용.  
+  Spring MVC는 **모델, 뷰, 컨트롤러**로, 계층형 구조는 **Service Layer**와 **Repository Layer**로 나뉨.
+
+- **요청 처리 흐름**  
+  사용자 요청은 **Web Layer (Controller)** 에서 시작하여, **Service Layer**로 비즈니스 로직을 처리하고, **Repository Layer**에서 데이터를 주고받음. MVC의 **Controller → Model → View** 흐름과 유사
+
+- **컨트롤러의 역할**  
+  **Controller**가 사용자 요청을 처리하고, 비즈니스 로직으로 전달하는 **중재자 역할**을 수행.
+
+### 3. 차이점
+
+- **모델의 역할**  
+  - **MVC**: 모델은 주로 뷰와 관련된 데이터를 처리, DTO 또는 엔티티 객체를 사용해 뷰로 데이터를 전달.  
+  - **계층형 구조**: 모델은 비즈니스 로직과 데이터베이스 작업에 집중, **Repository Layer**에서 데이터 저장소와 상호작용.
+
+- **비즈니스 로직 처리 위치**  
+  - **MVC**: 비즈니스 로직이 일부 **컨트롤러**에서 처리됨.  
+  - **계층형 구조**: 비즈니스 로직은 **Service Layer**에서만 처리되고, 컨트롤러는 요청만 처리.
+
+- **구조의 세분화**  
+  - **MVC**: 구조가 **Model, View, Controller**로 단순함!  
+  - **계층형 구조**: **Web Layer, Service Layer, Repository Layer**로 더 세분화되며, 각 계층의 역할이 전문화됨.
+
+- **데이터 처리의 범위**  
+  - **MVC**: 모델은 주로 뷰로 전달될 데이터를 처리.  
+  - **계층형 구조**: 모델은 **비즈니스 로직**과 **데이터베이스 작업**을 포함한 애플리케이션 상태 관리가 목적.
+
+---
+
+## Spring 중요 개념
+
+1. **ORM (Object-Relational Mapping)**  
+   객체와 DB 테이블 간의 관계를 자동으로 매핑해주는 기술. Hibernate, JPA 등이 대표적.
+
+2. **Gradle 의존성 관리**  
+   - `compile`: Gradle 3.4 이전 방식으로 모든 의존성이 **컴파일 및 런타임에 노출**.
+   - `implementation`: 이후 권장 방식으로 **모듈 내부에서만 의존성 사용**.
+
+3. **DTO (Data Transfer Object)**  
+   계층 간 **데이터 전달용 객체**로, **Entity와 분리**되어 필요한 정보만 포함.
+
+4. **DAO (Data Access Object)**  
+   **DB와 상호작용**하는 객체로, CRUD 작업을 수행.
+
+5. **더티 체킹 (Dirty Checking)**  
+   JPA에서 **Entity의 변경 사항을 자동 감시**하고, 이를 DB에 반영.
+
+6. **영속성 컨텍스트**  
+   JPA에서 **Entity 객체를 관리**하는 일종의 캐시 역할을 하는 메모리 공간.
+
+7. **JPA Auditing**  
+   **Entity의 생성 및 수정 시점**을 기록하는 기능.
+
+8. **Optional**  
+   **null 값을 안전하게 처리**하는 도구로, null로 인한 오류를 방지.
+
+---
+
+## Kubernetes 기본 구조
+
+![Kubernetes Diagram](https://github.com/user-attachments/assets/1c991f63-16c5-4b9a-8008-da253df91d1f)
+
+1. **Pod**  
+   가장 작은 실행 단위로, 실제 애플리케이션 컨테이너를 포함.
+
+2. **Node**  
+   Pod를 실행하는 가상 또는 물리 머신.
+
+3. **Deployment**  
+   Pod의 배포와 관리를 정의.
+
+4. **etcd**  
+   클러스터 내 모든 정보를 저장하는 저장소.
+
+5. **API 서버**  
+   Kubernetes의 중앙 통신 허브로, **사용자 요청을 받아 처리**하고 구성 요소에 전달.
+
+6. **Controller Manager**  
+   클러스터 관리에 필요한 **컨트롤러들을 관리**하고 **원하는 상태와 현재 상태의 일치**를 위해 동작.
+
+7. **Kublet**  
+   각 노드에서 **Pod를 실행하고 관리**하는 에이전트로, API에서 명령을 받아 Pod를 생성 및 모니터링.
+
+---
